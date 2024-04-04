@@ -1,7 +1,9 @@
 package com.vanlam.moviebox.main.presentation.main
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -10,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -32,15 +35,21 @@ fun MediaMainScreen(
     Scaffold(
         bottomBar = {
             BottomBar(bottomNavController = bottomNavController)
+        },
+        content = {
+            Box(
+                modifier = Modifier
+                    .padding(bottom = it.calculateBottomPadding())
+            ) {
+                BottomNavGraph(
+                    navController = navController,
+                    bottomNavController = bottomNavController,
+                    mainUiState = mainUiState,
+                    mainUiEvent = mainUiEvent
+                )
+            }
         }
-    ) {
-        BottomNavGraph(
-            navController = navController,
-            bottomNavController = bottomNavController,
-            mainUiState = mainUiState,
-            mainUiEvent = mainUiEvent
-        )
-    }
+    )
 }
 
 @Composable
