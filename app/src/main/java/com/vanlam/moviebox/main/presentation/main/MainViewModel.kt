@@ -1,5 +1,6 @@
 package com.vanlam.moviebox.main.presentation.main
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,6 +33,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             delay(1500)
             showSplashScreenState.value = false
+            _mainUiState.update { it.copy(isLoadFirst = false) }
         }
     }
 
@@ -122,38 +124,61 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _mainUiState.update { it.copy(isLoading = true) }
 
-            mediaRepository.getMovieList(
-                Category.POPULAR,
-                mainUiState.value.popularMoviePage
-            ).collectLatest { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        _mainUiState.update {
-                            it.copy(isLoading = false)
-                        }
-                    }
-                    is Resource.Success -> {
-                        result.data?.let {  popularMovies ->
-                            val mediaList = popularMovies.toMutableList()
+            if (loadMore && !mainUiState.value.isLoadFirst) {
+                _mainUiState.update { it.copy(popularMoviePage = mainUiState.value.popularMoviePage + 1) }
 
-                            if (loadMore) {
+                mediaRepository.getMovieList(
+                    Category.POPULAR,
+                    mainUiState.value.popularMoviePage
+                ).collectLatest { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = false)
+                            }
+                        }
+                        is Resource.Success -> {
+                            result.data?.let {  popularMovies ->
+
                                 _mainUiState.update {
                                     it.copy(
-                                        popularMovieList = mainUiState.value.popularMovieList + mediaList.shuffled(),
-                                        popularMoviePage = mainUiState.value.popularMoviePage + 1
+                                        popularMovieList = mainUiState.value.popularMovieList + popularMovies,
                                     )
                                 }
                             }
-                            else {
-                                _mainUiState.update {
-                                    it.copy(popularMovieList = popularMovies.shuffled())
-                                }
+                        }
+                        is Resource.Loading -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = true)
                             }
                         }
                     }
-                    is Resource.Loading -> {
-                        _mainUiState.update {
-                            it.copy(isLoading = true)
+                }
+            }
+            else {
+                mediaRepository.getMovieList(
+                    Category.POPULAR,
+                    mainUiState.value.popularMoviePage
+                ).collectLatest { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = false)
+                            }
+                        }
+                        is Resource.Success -> {
+                            result.data?.let {  popularMovies ->
+                                _mainUiState.update {
+                                    it.copy(
+                                        popularMovieList = popularMovies,
+                                    )
+                                }
+                            }
+                        }
+                        is Resource.Loading -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = true)
+                            }
                         }
                     }
                 }

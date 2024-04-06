@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import com.vanlam.moviebox.main.presentation.main.MainUiEvent
 import com.vanlam.moviebox.main.presentation.main.MainUiState
 import com.vanlam.moviebox.main.utils.Category
+import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 import com.vanlam.moviebox.utils.Screen
 import com.vanlam.moviebox.utils.ui_components.SearchBarNonFocus
 
@@ -39,53 +40,46 @@ fun MediaHomeScreen(
     mainUiEvent: (MainUiEvent) -> Unit
 ) {
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.secondary)
+            .verticalScroll(rememberScrollState())
+            .background(color = MyMaterialTheme.appColor.backgroundColor)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .background(color = MaterialTheme.colorScheme.onSurface)
-        ) {
-            SearchBarNonFocus(navController = navController)
+        SearchBarNonFocus(navController = navController)
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            MediaHomeSection(
-                type = Category.TRENDING_ALL,
-                navController = navController,
-                mainUiState = mainUiState
-            )
+        MediaHomeSection(
+            type = Category.TRENDING_ALL,
+            navController = navController,
+            mainUiState = mainUiState
+        )
 
-            Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
-            MediaHomeSection(
-                type = Category.TV_DISCOVER,
-                navController = navController,
-                mainUiState = mainUiState
-            )
+        MediaHomeSection(
+            type = Category.TV_DISCOVER,
+            navController = navController,
+            mainUiState = mainUiState
+        )
 
-            Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
-            MediaHomeSection(
-                type = Category.TOP_RATED,
-                navController = navController,
-                mainUiState = mainUiState
-            )
+        MediaHomeSection(
+            type = Category.TOP_RATED,
+            navController = navController,
+            mainUiState = mainUiState
+        )
 
-            Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
-            MediaHomeSection(
-                type = Category.POPULAR,
-                navController = navController,
-                mainUiState = mainUiState
-            )
+        MediaHomeSection(
+            type = Category.POPULAR,
+            navController = navController,
+            mainUiState = mainUiState
+        )
 
-            Spacer(modifier = Modifier.height(18.dp))
-        }
-
+        Spacer(modifier = Modifier.height(18.dp))
     }
 }
