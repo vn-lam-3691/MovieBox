@@ -1,8 +1,11 @@
 package com.vanlam.moviebox.main.presentation.main
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +23,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 import com.vanlam.moviebox.utils.BottomBarScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -39,6 +43,7 @@ fun MediaMainScreen(
         content = {
             Box(
                 modifier = Modifier
+                    .background(color = MyMaterialTheme.appColor.backgroundColor)
                     .padding(bottom = it.calculateBottomPadding())
             ) {
                 BottomNavGraph(
@@ -67,12 +72,18 @@ fun BottomBar(
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar {
-        screens.forEach { screen ->
-            AddItem(
-                screen = screen,
-                currentDest = currentDestination,
-                bottomNavController = bottomNavController
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = MyMaterialTheme.appColor.bottomNavColor)
+        ) {
+            screens.forEach { screen ->
+                AddItem(
+                    screen = screen,
+                    currentDest = currentDestination,
+                    bottomNavController = bottomNavController
+                )
+            }
         }
     }
 }
@@ -94,12 +105,34 @@ fun RowScope.AddItem(
             }
         },
         icon = {
-            Icon(imageVector = screen.icon, contentDescription = "Navigation Icon")
+            if (currentDest?.hierarchy?.any { it.route == screen.route } == true) {
+                Icon(
+                    imageVector = screen.icon,
+                    contentDescription = "Navigation Icon",
+                    tint = MyMaterialTheme.appColor.primaryColor
+                )
+            }
+            else {
+                Icon(
+                    imageVector = screen.icon,
+                    contentDescription = "Navigation Icon",
+                    tint = MyMaterialTheme.appColor.labelColor
+                )
+            }
         },
         label = {
-            Text(
-                text = screen.title, color = MaterialTheme.colorScheme.onSurface
-            )
+            if (currentDest?.hierarchy?.any { it.route == screen.route } == true) {
+                Text(
+                    text = screen.title, color = MyMaterialTheme.appColor.primaryColor
+                )
+            }
+            else {
+                Text(
+                    text = screen.title,
+                    color = MyMaterialTheme.appColor.labelColor,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     )
 }

@@ -9,7 +9,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -37,6 +40,18 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+data class AppColor(
+    val backgroundColor: Color = Color.Unspecified,
+    val bottomNavColor: Color = Color.Unspecified,
+    val searchBoxColor: Color = Color.Unspecified,
+    val primaryColor: Color = Color.Unspecified,
+    val textColor: Color = Color.Unspecified,
+    val labelColor: Color = Color.Unspecified,
+    val tintTextBoxColor: Color = Color.Unspecified
+)
+
+val LocalAppColor = compositionLocalOf { AppColor() }
+
 @Composable
 fun MovieBoxTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -62,9 +77,27 @@ fun MovieBoxTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+    val myAppColor = AppColor(
+        backgroundColor = Color(0xFF15141F),
+        bottomNavColor = Color(0xFF242428),
+        searchBoxColor = Color(0xFF242231),
+        primaryColor = Color(0xFFED3A29),
+        textColor = Color(0xFFFFFFFF),
+        labelColor = Color(0xFFBCBCBC),
+        tintTextBoxColor = Color(0xFFBBBBBB)
     )
+
+    CompositionLocalProvider(LocalAppColor provides myAppColor) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = myTypography,
+            content = content
+        )
+    }
+}
+
+object MyMaterialTheme {
+    val appColor: AppColor
+        @Composable
+        get() = LocalAppColor.current
 }

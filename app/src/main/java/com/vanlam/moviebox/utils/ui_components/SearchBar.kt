@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 
 @Composable
 fun SearchBar() {
@@ -35,7 +36,7 @@ fun SearchBarNonFocus(
 ) {
     Box(
         modifier = Modifier
-            .background(Color.Transparent)
+            .background(color = Color.Transparent)
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .height(50.dp)
     ) {
@@ -48,28 +49,24 @@ fun SearchBarNonFocus(
                 }
                 .padding(horizontal = 8.dp)
                 .clip(RoundedCornerShape(18.dp))
-                .background(
-                    MaterialTheme.colorScheme.secondaryContainer,
-                    MaterialTheme.shapes.small,
-                )
+                .background(MyMaterialTheme.appColor.searchBoxColor)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 Icons.Rounded.Search,
                 null,
-                tint = MaterialTheme.colorScheme.onBackground,
+                tint = MyMaterialTheme.appColor.textColor,
                 modifier = Modifier
                     .padding(start = 16.dp)
                     .size(23.dp)
-                    .alpha(0.3f)
             )
 
             Text(
                 modifier = Modifier
-                    .padding(start = 8.dp),
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
-                fontSize = 16.sp,
+                    .padding(start = 14.dp),
+                color = MyMaterialTheme.appColor.tintTextBoxColor,
+                style = MaterialTheme.typography.bodyMedium,
                 text = "Search movie"
             )
         }

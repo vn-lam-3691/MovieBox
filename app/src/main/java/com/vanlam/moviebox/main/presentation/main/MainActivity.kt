@@ -3,6 +3,7 @@ package com.vanlam.moviebox.main.presentation.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vanlam.moviebox.main.presentation.main.MainViewModel
 import com.vanlam.moviebox.ui.theme.MovieBoxTheme
+import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 import com.vanlam.moviebox.utils.Screen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -31,17 +33,23 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SetSystemBarColor(color = MaterialTheme.colorScheme.surface)
+            SetSystemBarColor(color = MaterialTheme.colorScheme.onBackground)
 
             MovieBoxTheme {
-                val mainViewModel = hiltViewModel<MainViewModel>()
-                val mainUiState = mainViewModel.mainUiState.collectAsState().value
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = MyMaterialTheme.appColor.backgroundColor)
+                ) {
+                    val mainViewModel = hiltViewModel<MainViewModel>()
+                    val mainUiState = mainViewModel.mainUiState.collectAsState().value
 
-                installSplashScreen().setKeepOnScreenCondition {
-                    mainViewModel.showSplashScreenState.value
+                    installSplashScreen().setKeepOnScreenCondition {
+                        mainViewModel.showSplashScreenState.value
+                    }
+
+                    NavigationApp(mainUiState, mainViewModel::onEvent)
                 }
-
-                NavigationApp(mainUiState, mainViewModel::onEvent)
             }
         }
     }
