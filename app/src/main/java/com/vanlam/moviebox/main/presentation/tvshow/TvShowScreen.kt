@@ -1,5 +1,6 @@
-package com.vanlam.moviebox.main.presentation.popularMovie
+package com.vanlam.moviebox.main.presentation.tvshow
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,14 +28,14 @@ import com.vanlam.moviebox.utils.ui_components.MediaItem
 import com.vanlam.moviebox.utils.ui_components.SearchBarNonFocus
 
 @Composable
-fun PopularMovieScreen(
+fun TvShowScreen(
     navController: NavHostController,
     mainUiState: MainUiState,
     mainUiEvent: (MainUiEvent) -> Unit
 ) {
-    val popularMediaList = mainUiState.popularMovieList
+    val tvShowList = mainUiState.discoverTvShowList
 
-    if (popularMediaList.isEmpty()) {
+    if (tvShowList.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -62,7 +60,7 @@ fun PopularMovieScreen(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = "Popular Movie",
+                        text = "TV Shows",
                         style = MaterialTheme.typography.titleLarge,
                         color = MyMaterialTheme.appColor.textColor,
                         modifier = Modifier.padding(start = 24.dp)
@@ -72,14 +70,14 @@ fun PopularMovieScreen(
                 }
             }
 
-            items(popularMediaList.size) { index ->
+            items(tvShowList.size) { index ->
                 MediaItem(
-                    media = popularMediaList[index],
+                    media = tvShowList[index],
                     navController = navController
                 )
 
-                if (index >= popularMediaList.size - 1) {
-                    mainUiEvent(MainUiEvent.LoadMore(Category.POPULAR))
+                if (index >= tvShowList.size - 1) {
+                    mainUiEvent(MainUiEvent.LoadMore(Category.TV_SHOW))
                 }
             }
         }

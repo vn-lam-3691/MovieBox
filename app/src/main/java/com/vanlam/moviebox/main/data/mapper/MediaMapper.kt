@@ -18,7 +18,12 @@ fun MediaDto.toMedia(): Media {
         title = title ?: "",
         video = video ?: false,
         vote_average = vote_average ?: 0.0,
-        vote_count = vote_count ?: 0
+        vote_count = vote_count ?: 0,
+
+        origin_country = origin_country ?: emptyList(),
+        original_name = original_name ?: "",
+        first_air_date = first_air_date ?: "",
+        name = name ?: ""
     )
 }
 

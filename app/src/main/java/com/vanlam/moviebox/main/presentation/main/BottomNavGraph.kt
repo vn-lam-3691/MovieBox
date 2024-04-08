@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.vanlam.moviebox.main.presentation.home.MediaHomeScreen
 import com.vanlam.moviebox.main.presentation.popularMovie.PopularMovieScreen
+import com.vanlam.moviebox.main.presentation.tvshow.TvShowScreen
 import com.vanlam.moviebox.utils.BottomBarScreen
 
 @Composable
@@ -38,7 +39,11 @@ fun BottomNavGraph(
         }
 
         composable(route = BottomBarScreen.TV_SHOW.route) {
-
+            TvShowScreen(
+                navController = navController,
+                mainUiState = mainUiState,
+                mainUiEvent = mainUiEvent
+            )
         }
 
         composable(route = BottomBarScreen.WATCH_LIST.route) {

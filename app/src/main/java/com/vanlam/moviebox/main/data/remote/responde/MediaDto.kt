@@ -14,5 +14,10 @@ data class MediaDto(
     val title: String?,
     val video: Boolean?,
     val vote_average: Double?,
-    val vote_count: Int?
+    val vote_count: Int?,
+
+    val origin_country: List<String>?,
+    val original_name: String?,
+    val first_air_date: String?,
+    val name: String?
 )

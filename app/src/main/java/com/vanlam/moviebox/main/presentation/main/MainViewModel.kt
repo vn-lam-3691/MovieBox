@@ -33,7 +33,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             delay(1500)
             showSplashScreenState.value = false
-            _mainUiState.update { it.copy(isLoadFirst = false) }
         }
     }
 
@@ -124,7 +123,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _mainUiState.update { it.copy(isLoading = true) }
 
-            if (loadMore && !mainUiState.value.isLoadFirst) {
+            if (loadMore) {
                 _mainUiState.update { it.copy(popularMoviePage = mainUiState.value.popularMoviePage + 1) }
 
                 mediaRepository.getMovieList(
@@ -138,11 +137,10 @@ class MainViewModel @Inject constructor(
                             }
                         }
                         is Resource.Success -> {
-                            result.data?.let {  popularMovies ->
-
+                            result.data?.let { popularMovies ->
                                 _mainUiState.update {
                                     it.copy(
-                                        popularMovieList = mainUiState.value.popularMovieList + popularMovies,
+                                        popularMovieList = mainUiState.value.popularMovieList + popularMovies
                                     )
                                 }
                             }
@@ -170,7 +168,7 @@ class MainViewModel @Inject constructor(
                             result.data?.let {  popularMovies ->
                                 _mainUiState.update {
                                     it.copy(
-                                        popularMovieList = popularMovies,
+                                        popularMovieList = popularMovies
                                     )
                                 }
                             }
@@ -188,41 +186,60 @@ class MainViewModel @Inject constructor(
 
     fun fetchTvShowList(loadMore: Boolean) {
         viewModelScope.launch {
-            _mainUiState.update {
-                it.copy(isLoading = true)
-            }
+            _mainUiState.update { it.copy(isLoading = true) }
 
-            mediaRepository.getTvShowList(
-                mainUiState.value.tvShowPage
-            ).collectLatest { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        _mainUiState.update {
-                            it.copy(isLoading = false)
+            if (loadMore) {
+                _mainUiState.update { it.copy(tvShowPage = mainUiState.value.tvShowPage + 1) }
+
+                mediaRepository.getTvShowList(
+                    mainUiState.value.tvShowPage
+                ).collectLatest { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = false)
+                            }
                         }
-                    }
-                    is Resource.Success -> {
-                        result.data?.let { tvShowList ->
-                            val mediaList = tvShowList.shuffled()
-
-                            if (loadMore) {
+                        is Resource.Success -> {
+                            result.data?.let { tvShowList ->
                                 _mainUiState.update {
                                     it.copy(
-                                        discoverTvShowList = mainUiState.value.discoverTvShowList + mediaList.shuffled(),
-                                        tvShowPage = mainUiState.value.tvShowPage + 1
+                                        discoverTvShowList = mainUiState.value.discoverTvShowList + tvShowList
                                     )
                                 }
                             }
-                            else {
-                                _mainUiState.update {
-                                    it.copy(discoverTvShowList = tvShowList)
-                                }
+                        }
+                        is Resource.Loading -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = result.isLoading)
                             }
                         }
                     }
-                    is Resource.Loading -> {
-                        _mainUiState.update {
-                            it.copy(isLoading = result.isLoading)
+                }
+            }
+            else {
+                mediaRepository.getTvShowList(
+                    mainUiState.value.tvShowPage
+                ).collectLatest { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = false)
+                            }
+                        }
+                        is Resource.Success -> {
+                            result.data?.let { tvShowList ->
+                                _mainUiState.update {
+                                    it.copy(
+                                        discoverTvShowList = tvShowList
+                                    )
+                                }
+                            }
+                        }
+                        is Resource.Loading -> {
+                            _mainUiState.update {
+                                it.copy(isLoading = result.isLoading)
+                            }
                         }
                     }
                 }

@@ -40,6 +40,7 @@ class MediaRepositoryImpl @Inject constructor(
                 }
 
                 emit(Resource.Success(movieList))
+                emit(Resource.Loading(false))
             }
         }
     }

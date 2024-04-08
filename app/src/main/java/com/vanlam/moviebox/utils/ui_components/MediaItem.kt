@@ -104,14 +104,26 @@ fun MediaItem(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = media.title,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MyMaterialTheme.appColor.textColor,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 10.dp)
-        )
+        if (media.title.isNotEmpty()) {
+            Text(
+                text = media.title,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MyMaterialTheme.appColor.textColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+        else {
+            Text(
+                text = media.name,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MyMaterialTheme.appColor.textColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
         
         Spacer(modifier = Modifier.height(4.dp))
 
