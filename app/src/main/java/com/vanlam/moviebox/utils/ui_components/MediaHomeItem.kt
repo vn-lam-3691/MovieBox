@@ -27,6 +27,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.google.gson.Gson
 import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.domain.model.Media
 import com.vanlam.moviebox.utils.Screen
@@ -52,7 +53,8 @@ fun MediaHomeItem(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .clickable {
-                // Navigate to Details Screen
+                navController.currentBackStackEntry?.savedStateHandle?.set("media", media)
+                navController.navigate(Screen.DETAIL_SCREEN.route)
             }
             .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
     ) {

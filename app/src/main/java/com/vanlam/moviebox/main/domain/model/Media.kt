@@ -1,5 +1,9 @@
 package com.vanlam.moviebox.main.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Media(
     val adult: Boolean,
     val backdrop_path: String,
@@ -20,4 +24,4 @@ data class Media(
     val original_name: String,
     val first_air_date: String,
     val name: String
-)
+): Parcelable

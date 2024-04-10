@@ -2,6 +2,8 @@ package com.vanlam.moviebox.di
 
 import com.vanlam.moviebox.main.data.repository.MediaRepositoryImpl
 import com.vanlam.moviebox.main.domain.repository.MediaRepository
+import com.vanlam.moviebox.media_details.data.repository.GenreRepositoryImpl
+import com.vanlam.moviebox.media_details.domain.repository.GenreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,4 +19,10 @@ abstract class RepositoryModule {
     abstract fun provideMediaRepository(
         mediaRepositoryImpl: MediaRepositoryImpl
     ): MediaRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideGenreRepository(
+        genreRepositoryImpl: GenreRepositoryImpl
+    ): GenreRepository
 }

@@ -3,6 +3,7 @@ package com.vanlam.moviebox.di
 import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.ACCESS_TOKEN
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.BASE_URL
+import com.vanlam.moviebox.media_details.data.remote.GenreApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,5 +64,13 @@ object AppModule {
         retrofit: Retrofit
     ): MediaApi {
         return retrofit.create(MediaApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGenreApi(
+        retrofit: Retrofit
+    ): GenreApi {
+        return retrofit.create(GenreApi::class.java)
     }
 }

@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -109,6 +110,9 @@ dependencies {
 
     // Youtube Player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28'
+
+    // Constraint Layout Compose
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 }
 
 kapt {
