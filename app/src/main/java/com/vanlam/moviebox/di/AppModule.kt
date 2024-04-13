@@ -1,12 +1,16 @@
 package com.vanlam.moviebox.di
 
+import android.content.Context
+import androidx.room.Room
 import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.ACCESS_TOKEN
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.BASE_URL
 import com.vanlam.moviebox.media_details.data.remote.GenreApi
+import com.vanlam.moviebox.watch_list.data.local.MediaDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -72,5 +76,17 @@ object AppModule {
         retrofit: Retrofit
     ): GenreApi {
         return retrofit.create(GenreApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMediaDatabase(
+        @ApplicationContext context: Context
+    ): MediaDatabase {
+        return Room.databaseBuilder(
+            context,
+            MediaDatabase::class.java,
+            "media_db.db"
+        ).build()
     }
 }

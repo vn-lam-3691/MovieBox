@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,8 +48,10 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.vanlam.moviebox.R
 import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.domain.model.Media
+import com.vanlam.moviebox.main.presentation.main.MainUiEvent
 import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 import com.vanlam.moviebox.utils.ui_components.RatingBar
 
@@ -57,13 +60,14 @@ fun DetailsScreen(
     navController: NavHostController,
     media: Media,
     detailsUiState: DetailsUiState,
-    onEvent: (DetailScreenEvent) -> Unit
+    onDetailsEvent: (DetailScreenEvent) -> Unit,
+    onMainEvent: (MainUiEvent) -> Unit
 ) {
 
     val widthDevice = LocalConfiguration.current.screenWidthDp
 
-    val backdropImageUrl = "${MediaApi.BAST_IMAGE_URL}/${media?.backdrop_path}"
-    val posterImageUrl = "${MediaApi.BAST_IMAGE_URL}/${media?.poster_path}"
+    val backdropImageUrl = "${MediaApi.BAST_IMAGE_URL}/${media.backdrop_path}"
+    val posterImageUrl = "${MediaApi.BAST_IMAGE_URL}/${media.poster_path}"
 
     val backdropImageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -92,7 +96,7 @@ fun DetailsScreen(
                 .fillMaxWidth()
         ) {
 
-            val (backdropImg, posterImg, mediaInfo, backImg) = createRefs()
+            val (backdropImg, posterImg, mediaInfo, backImg, favoriteImg) = createRefs()
 
             BackdropMediaSection(backdropImageState, modifier = Modifier
                 .fillMaxWidth()
@@ -112,10 +116,33 @@ fun DetailsScreen(
                     .size(28.dp)
                     .clickable {
                         navController.popBackStack()
+                        onMainEvent(MainUiEvent.RefreshWatchList)
                     }
                     .constrainAs(backImg) {
                         top.linkTo(parent.top, margin = 16.dp)
                         start.linkTo(parent.start, margin = 20.dp)
+                    }
+            )
+
+
+            val painterIcon = if (detailsUiState.isSavedWatchList) {
+                painterResource(id = R.drawable.ic_favorite_active)
+            } else {
+                painterResource(id = R.drawable.ic_favorite)
+            }
+
+            Icon(
+                painter = painterIcon,
+                contentDescription = "favorite",
+                tint = MyMaterialTheme.appColor.textColor,
+                modifier = Modifier
+                    .size(28.dp)
+                    .clickable {
+                        onDetailsEvent(DetailScreenEvent.HandleToWatchList(media))
+                    }
+                    .constrainAs(favoriteImg) {
+                        top.linkTo(parent.top, margin = 16.dp)
+                        end.linkTo(parent.end, margin = 20.dp)
                     }
             )
 

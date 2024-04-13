@@ -134,7 +134,8 @@ fun NavigationApp(
                     navController = navController,
                     media = media,
                     detailsUiState = detailUiState,
-                    onEvent = detailsViewModel::onEvent
+                    onDetailsEvent = detailsViewModel::onEvent,
+                    onMainEvent = onEvent
                 )
             }
         }

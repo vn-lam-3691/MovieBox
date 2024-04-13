@@ -6,7 +6,10 @@ import com.vanlam.moviebox.utils.Type
 
 data class DetailsUiState(
     val isLoading: Boolean = false,
+    val isSaving: Boolean = false,
     val isSavedWatchList: Boolean = false,
+    val isChecking: Boolean = false,
+
     var typeMedia: String = Type.MOVIE,
     var mediaItem: Media? = null,
     val genres: List<String> = emptyList()

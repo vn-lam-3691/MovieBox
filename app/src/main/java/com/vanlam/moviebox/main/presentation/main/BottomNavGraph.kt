@@ -8,6 +8,7 @@ import com.vanlam.moviebox.main.presentation.home.MediaHomeScreen
 import com.vanlam.moviebox.main.presentation.popularMovie.PopularMovieScreen
 import com.vanlam.moviebox.main.presentation.tvshow.TvShowScreen
 import com.vanlam.moviebox.utils.BottomBarScreen
+import com.vanlam.moviebox.watch_list.presentation.MediaWatchListScreen
 
 @Composable
 fun BottomNavGraph(
@@ -47,7 +48,10 @@ fun BottomNavGraph(
         }
 
         composable(route = BottomBarScreen.WATCH_LIST.route) {
-
+            MediaWatchListScreen(
+                navController = navController,
+                mainUiState = mainUiState
+            )
         }
     }
 }

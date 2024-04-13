@@ -8,5 +8,7 @@ sealed class DetailScreenEvent {
         val media: Media
     ): DetailScreenEvent()
 
-    // Saved click event
+    data class HandleToWatchList(
+        val media: Media
+    ): DetailScreenEvent()
 }

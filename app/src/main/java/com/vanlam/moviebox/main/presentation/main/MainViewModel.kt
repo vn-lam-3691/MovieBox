@@ -9,6 +9,7 @@ import com.vanlam.moviebox.main.utils.Category
 import com.vanlam.moviebox.main.utils.Resource
 import com.vanlam.moviebox.utils.BottomBarScreen
 import com.vanlam.moviebox.utils.Screen
+import com.vanlam.moviebox.watch_list.domain.repository.WatchListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
+    private val watchListRepository: WatchListRepository
 ): ViewModel() {
 
     private val _mainUiState = MutableStateFlow(MainUiState())
@@ -45,6 +47,9 @@ class MainViewModel @Inject constructor(
                 fetchTvShowList(true)
             }
         }
+        else if (mainUiEvent is MainUiEvent.RefreshWatchList) {
+            fetchMediaWatchList()
+        }
     }
 
     fun loadAllData() {
@@ -52,6 +57,7 @@ class MainViewModel @Inject constructor(
         fetchPopularMovieList(false)
         fetchTvShowList(false)
         fetchTopRatedMovieList()
+        fetchMediaWatchList()
     }
 
     fun fetchTrendingAllList(
@@ -240,6 +246,36 @@ class MainViewModel @Inject constructor(
                             _mainUiState.update {
                                 it.copy(isLoading = result.isLoading)
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchMediaWatchList() {
+        viewModelScope.launch {
+            _mainUiState.update {
+                it.copy(isLoading = true)
+            }
+
+            watchListRepository.getAllWatchList().collectLatest { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        _mainUiState.update {
+                            it.copy(isLoading = mainUiState.value.isLoading)
+                        }
+                    }
+                    is Resource.Success -> {
+                        result.data?.let { watchList ->
+                            _mainUiState.update {
+                                it.copy(mediaWatchList = watchList)
+                            }
+                        }
+                    }
+                    is Resource.Error -> {
+                        _mainUiState.update {
+                            it.copy(isLoading = false)
                         }
                     }
                 }
