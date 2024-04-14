@@ -9,25 +9,26 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vanlam.moviebox.main.domain.model.Media
-import com.vanlam.moviebox.main.presentation.main.MainViewModel
-import com.vanlam.moviebox.media_details.presentation.DetailScreenEvent
-import com.vanlam.moviebox.media_details.presentation.DetailsScreen
-import com.vanlam.moviebox.media_details.presentation.DetailsViewModel
+import com.vanlam.moviebox.media_details.presentation.detail.DetailScreenEvent
+import com.vanlam.moviebox.media_details.presentation.detail.DetailsScreen
+import com.vanlam.moviebox.media_details.presentation.detail.DetailsViewModel
+import com.vanlam.moviebox.media_details.presentation.watch_video.VideoMediaScreen
 import com.vanlam.moviebox.ui.theme.MovieBoxTheme
 import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 import com.vanlam.moviebox.utils.Screen
@@ -142,6 +143,25 @@ fun NavigationApp(
 
         composable(Screen.SEARCH_SCREEN.route) {
 //            SearchScreen()
+        }
+
+        composable(
+            route = Screen.VIDEO_SCREEN.route + "/{videoId}",
+            arguments = listOf(
+                navArgument(name = "videoId") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backstackEntry ->
+            val videoId = backstackEntry.arguments?.getString("videoId")
+
+            if (videoId != null) {
+                VideoMediaScreen(
+                    navController = navController,
+                    lifecycleOwner = LocalLifecycleOwner.current,
+                    videoId = videoId
+                )
+            }
         }
     }
 }

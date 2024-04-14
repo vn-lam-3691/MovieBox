@@ -1,9 +1,10 @@
-package com.vanlam.moviebox.media_details.presentation
+package com.vanlam.moviebox.media_details.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vanlam.moviebox.main.utils.Resource
 import com.vanlam.moviebox.media_details.domain.model.Genre
+import com.vanlam.moviebox.media_details.domain.repository.ExtraDetailRepository
 import com.vanlam.moviebox.media_details.domain.repository.GenreRepository
 import com.vanlam.moviebox.utils.Type
 import com.vanlam.moviebox.watch_list.domain.repository.WatchListRepository
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val genreRepository: GenreRepository,
-    private val watchListRepository: WatchListRepository
+    private val watchListRepository: WatchListRepository,
+    private val extraDetailRepository: ExtraDetailRepository
 ) : ViewModel() {
 
     private val _detailState = MutableStateFlow(DetailsUiState())
@@ -39,6 +41,7 @@ class DetailsViewModel @Inject constructor(
                 }
 
                 fetchMediaGenre(detailState.value.typeMedia)
+                fetchMediaVideos(detailState.value.typeMedia)
 
                 checkMediaInWatchList()
             }
@@ -46,6 +49,43 @@ class DetailsViewModel @Inject constructor(
         else if (event is DetailScreenEvent.HandleToWatchList) {
             handleToWatchList()
             checkMediaInWatchList()
+        }
+    }
+
+    private fun fetchMediaVideos(type: String) {
+        viewModelScope.launch {
+            _detailState.update {
+                it.copy(isLoading = true)
+            }
+
+            detailState.value.mediaItem?.let { currentMedia ->
+
+                extraDetailRepository.getVideosList(
+                    type,
+                    currentMedia.id
+                ).collectLatest { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _detailState.update {
+                                it.copy(isLoading = false)
+                            }
+                        }
+                        is Resource.Success -> {
+                            result.data?.let { videoKey ->
+                                _detailState.update {
+                                    it.copy(videoId = videoKey)
+                                }
+                            }
+                        }
+                        is Resource.Loading -> {
+                            _detailState.update {
+                                it.copy(isLoading = result.isLoading)
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 

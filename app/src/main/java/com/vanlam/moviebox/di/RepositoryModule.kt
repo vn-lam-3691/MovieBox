@@ -2,7 +2,9 @@ package com.vanlam.moviebox.di
 
 import com.vanlam.moviebox.main.data.repository.MediaRepositoryImpl
 import com.vanlam.moviebox.main.domain.repository.MediaRepository
+import com.vanlam.moviebox.media_details.data.repository.ExtraDetailRepositoryImpl
 import com.vanlam.moviebox.media_details.data.repository.GenreRepositoryImpl
+import com.vanlam.moviebox.media_details.domain.repository.ExtraDetailRepository
 import com.vanlam.moviebox.media_details.domain.repository.GenreRepository
 import com.vanlam.moviebox.watch_list.data.repository.WatchListRepositoryImpl
 import com.vanlam.moviebox.watch_list.domain.repository.WatchListRepository
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun provideWatchListRepository(
         watchListRepositoryImpl: WatchListRepositoryImpl
     ): WatchListRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideExtraDetailRepository(
+        extraDetailRepositoryImpl: ExtraDetailRepositoryImpl
+    ): ExtraDetailRepository
 }

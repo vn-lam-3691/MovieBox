@@ -1,4 +1,4 @@
-package com.vanlam.moviebox.media_details.presentation
+package com.vanlam.moviebox.media_details.presentation.detail
 
 import com.vanlam.moviebox.main.domain.model.Media
 

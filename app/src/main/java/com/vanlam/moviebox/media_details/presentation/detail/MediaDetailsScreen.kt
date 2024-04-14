@@ -1,4 +1,4 @@
-package com.vanlam.moviebox.media_details.presentation
+package com.vanlam.moviebox.media_details.presentation.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,6 +53,7 @@ import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.domain.model.Media
 import com.vanlam.moviebox.main.presentation.main.MainUiEvent
 import com.vanlam.moviebox.ui.theme.MyMaterialTheme
+import com.vanlam.moviebox.utils.Screen
 import com.vanlam.moviebox.utils.ui_components.RatingBar
 
 @Composable
@@ -96,7 +97,7 @@ fun DetailsScreen(
                 .fillMaxWidth()
         ) {
 
-            val (backdropImg, posterImg, mediaInfo, backImg, favoriteImg) = createRefs()
+            val (backdropImg, posterImg, mediaInfo, backImg, favoriteImg, playBtn) = createRefs()
 
             BackdropMediaSection(backdropImageState, modifier = Modifier
                 .fillMaxWidth()
@@ -145,6 +146,25 @@ fun DetailsScreen(
                         end.linkTo(parent.end, margin = 20.dp)
                     }
             )
+
+            if (!detailsUiState.videoId.equals("-1")) {
+                Icon(
+                    painter = painterResource(id = R.drawable.play_button),
+                    contentDescription = "play",
+                    tint = MyMaterialTheme.appColor.primaryColor,
+                    modifier = Modifier
+                        .size(72.dp)
+                        .clickable {
+                            navController.navigate(Screen.VIDEO_SCREEN.route + "/${detailsUiState.videoId}")
+                        }
+                        .constrainAs(playBtn) {
+                            top.linkTo(backdropImg.top)
+                            bottom.linkTo(backdropImg.bottom)
+                            start.linkTo(backdropImg.start)
+                            end.linkTo(backdropImg.end)
+                        }
+                )
+            }
 
             PosterMediaSection(
                 posterImageState,

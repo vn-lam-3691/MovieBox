@@ -1,4 +1,4 @@
-package com.vanlam.moviebox.media_details.presentation
+package com.vanlam.moviebox.media_details.presentation.detail
 
 import com.vanlam.moviebox.main.domain.model.Media
 import com.vanlam.moviebox.media_details.domain.model.Genre
@@ -12,5 +12,6 @@ data class DetailsUiState(
 
     var typeMedia: String = Type.MOVIE,
     var mediaItem: Media? = null,
-    val genres: List<String> = emptyList()
+    val genres: List<String> = emptyList(),
+    val videoId: String? = null
 )

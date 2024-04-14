@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.ACCESS_TOKEN
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.BASE_URL
+import com.vanlam.moviebox.media_details.data.remote.ExtraDetailApi
 import com.vanlam.moviebox.media_details.data.remote.GenreApi
 import com.vanlam.moviebox.watch_list.data.local.MediaDatabase
 import dagger.Module
@@ -76,6 +77,14 @@ object AppModule {
         retrofit: Retrofit
     ): GenreApi {
         return retrofit.create(GenreApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideExtraDetailApi(
+        retrofit: Retrofit
+    ): ExtraDetailApi {
+        return retrofit.create(ExtraDetailApi::class.java)
     }
 
     @Provides
