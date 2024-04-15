@@ -44,11 +44,47 @@ class DetailsViewModel @Inject constructor(
                 fetchMediaVideos(detailState.value.typeMedia)
 
                 checkMediaInWatchList()
+
+                fetchSimilarMedia(detailState.value.typeMedia)
             }
         }
         else if (event is DetailScreenEvent.HandleToWatchList) {
             handleToWatchList()
             checkMediaInWatchList()
+        }
+    }
+
+    private fun fetchSimilarMedia(type: String) {
+        viewModelScope.launch {
+            _detailState.update {
+                it.copy(isLoading = true)
+            }
+
+            detailState.value.mediaItem?.let { media ->
+                extraDetailRepository.getMediaSimilarList(
+                    type, media.id
+                ).collectLatest { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _detailState.update {
+                                it.copy(isLoading = false)
+                            }
+                        }
+                        is Resource.Success -> {
+                            result.data?.let { mediaList ->
+                                _detailState.update {
+                                    it.copy(similarMediaList = mediaList)
+                                }
+                            }
+                        }
+                        is Resource.Loading -> {
+                            _detailState.update {
+                                it.copy(isLoading = result.isLoading)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

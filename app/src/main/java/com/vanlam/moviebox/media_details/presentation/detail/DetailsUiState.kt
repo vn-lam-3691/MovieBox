@@ -13,5 +13,6 @@ data class DetailsUiState(
     var typeMedia: String = Type.MOVIE,
     var mediaItem: Media? = null,
     val genres: List<String> = emptyList(),
-    val videoId: String? = null
+    val videoId: String? = null,
+    val similarMediaList: List<Media> = emptyList()
 )

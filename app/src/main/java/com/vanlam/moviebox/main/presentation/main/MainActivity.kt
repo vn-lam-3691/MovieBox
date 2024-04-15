@@ -106,19 +106,7 @@ fun NavigationApp(
         }
 
         composable(
-            Screen.DETAIL_SCREEN.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            Screen.DETAIL_SCREEN.route
         ) {
             val media = navController.previousBackStackEntry?.savedStateHandle?.get<Media>("media")
 

@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +54,9 @@ import com.vanlam.moviebox.main.data.remote.MediaApi
 import com.vanlam.moviebox.main.domain.model.Media
 import com.vanlam.moviebox.main.presentation.main.MainUiEvent
 import com.vanlam.moviebox.ui.theme.MyMaterialTheme
+import com.vanlam.moviebox.ui.theme.poppinsFontFamily
 import com.vanlam.moviebox.utils.Screen
+import com.vanlam.moviebox.utils.ui_components.MediaHomeItem
 import com.vanlam.moviebox.utils.ui_components.RatingBar
 
 @Composable
@@ -270,6 +273,15 @@ fun DetailsScreen(
                 GenreItem(name = title)
             }
         }
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        SimilarMediaSection(
+            navController,
+            detailsUiState.similarMediaList
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -376,4 +388,36 @@ fun transLanguage(lang: String) = when (lang) {
     "ja" -> "Japanese"
 
     else -> "English"
+}
+
+@Composable
+fun SimilarMediaSection(
+    navController: NavHostController,
+    mediaList: List<Media>
+) {
+    Column {
+        Text(
+            text = "Similar ✨",
+            style = MaterialTheme.typography.titleLarge,
+            color = MyMaterialTheme.appColor.textColor,
+            modifier = Modifier
+                .padding(start = 24.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+        ) {
+            items(mediaList.take(10)) { media ->
+                MediaHomeItem(
+                    media = media,
+                    navController = navController,
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 160.dp)
+                )
+            }
+        }
+    }
 }

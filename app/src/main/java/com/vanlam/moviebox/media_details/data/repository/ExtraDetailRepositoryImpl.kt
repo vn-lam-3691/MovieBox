@@ -1,5 +1,7 @@
 package com.vanlam.moviebox.media_details.data.repository
 
+import com.vanlam.moviebox.main.data.mapper.toMedia
+import com.vanlam.moviebox.main.domain.model.Media
 import com.vanlam.moviebox.main.utils.Resource
 import com.vanlam.moviebox.media_details.data.mapper.toVideo
 import com.vanlam.moviebox.media_details.data.remote.ExtraDetailApi
@@ -48,6 +50,41 @@ class ExtraDetailRepositoryImpl @Inject constructor(
             }
             else {
                 emit(Resource.Success("-1"))
+            }
+
+            emit(Resource.Loading(false))
+        }
+    }
+
+    override suspend fun getMediaSimilarList(
+        type: String,
+        mediaId: Int
+    ): Flow<Resource<List<Media>>> {
+        return flow {
+            emit(Resource.Loading(true))
+
+            val mediaDtoList = try {
+                extraDetailApi.getMediaSimilar(type, mediaId)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Resource.Error(e.message.toString()))
+                return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                emit(Resource.Error(e.message.toString()))
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Resource.Error(e.message.toString()))
+                return@flow
+            }
+
+            mediaDtoList.let {
+                val similarList = it.results.map {
+                    it.toMedia()
+                }
+
+                emit(Resource.Success(similarList))
             }
 
             emit(Resource.Loading(false))
