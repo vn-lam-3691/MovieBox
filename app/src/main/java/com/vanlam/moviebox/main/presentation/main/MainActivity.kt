@@ -29,6 +29,7 @@ import com.vanlam.moviebox.media_details.presentation.detail.DetailScreenEvent
 import com.vanlam.moviebox.media_details.presentation.detail.DetailsScreen
 import com.vanlam.moviebox.media_details.presentation.detail.DetailsViewModel
 import com.vanlam.moviebox.media_details.presentation.watch_video.VideoMediaScreen
+import com.vanlam.moviebox.search_media.presentation.SearchScreen
 import com.vanlam.moviebox.ui.theme.MovieBoxTheme
 import com.vanlam.moviebox.ui.theme.MyMaterialTheme
 import com.vanlam.moviebox.utils.Screen
@@ -130,7 +131,9 @@ fun NavigationApp(
         }
 
         composable(Screen.SEARCH_SCREEN.route) {
-//            SearchScreen()
+            SearchScreen(
+                navController = navController
+            )
         }
 
         composable(

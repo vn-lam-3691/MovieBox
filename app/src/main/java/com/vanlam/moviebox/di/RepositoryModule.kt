@@ -6,6 +6,8 @@ import com.vanlam.moviebox.media_details.data.repository.ExtraDetailRepositoryIm
 import com.vanlam.moviebox.media_details.data.repository.GenreRepositoryImpl
 import com.vanlam.moviebox.media_details.domain.repository.ExtraDetailRepository
 import com.vanlam.moviebox.media_details.domain.repository.GenreRepository
+import com.vanlam.moviebox.search_media.data.repository.SearchRepositoryImpl
+import com.vanlam.moviebox.search_media.domain.SearchRepository
 import com.vanlam.moviebox.watch_list.data.repository.WatchListRepositoryImpl
 import com.vanlam.moviebox.watch_list.domain.repository.WatchListRepository
 import dagger.Binds
@@ -41,4 +43,11 @@ abstract class RepositoryModule {
     abstract fun provideExtraDetailRepository(
         extraDetailRepositoryImpl: ExtraDetailRepositoryImpl
     ): ExtraDetailRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideSearchRepository(
+        searchRepositoryImpl: SearchRepositoryImpl
+    ): SearchRepository
+
 }

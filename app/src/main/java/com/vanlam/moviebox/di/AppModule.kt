@@ -7,6 +7,7 @@ import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.ACCESS_TOKEN
 import com.vanlam.moviebox.main.data.remote.MediaApi.Companion.BASE_URL
 import com.vanlam.moviebox.media_details.data.remote.ExtraDetailApi
 import com.vanlam.moviebox.media_details.data.remote.GenreApi
+import com.vanlam.moviebox.search_media.data.remote.MediaSearchApi
 import com.vanlam.moviebox.watch_list.data.local.MediaDatabase
 import dagger.Module
 import dagger.Provides
@@ -85,6 +86,14 @@ object AppModule {
         retrofit: Retrofit
     ): ExtraDetailApi {
         return retrofit.create(ExtraDetailApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMediaSearchApi(
+        retrofit: Retrofit
+    ): MediaSearchApi {
+        return retrofit.create(MediaSearchApi::class.java)
     }
 
     @Provides
