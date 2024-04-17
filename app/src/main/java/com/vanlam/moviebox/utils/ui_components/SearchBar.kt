@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -85,6 +87,20 @@ fun SearchBar(
                         .padding(start = 16.dp)
                         .size(23.dp)
                 )
+            },
+            trailingIcon = {
+                IconButton(onClick = {
+                    text = ""
+                    onSearch(text)
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = null,
+                        tint = MyMaterialTheme.appColor.textColor,
+                        modifier = Modifier
+                            .size(22.dp)
+                    )
+                }
             },
             placeholder = {
                 Text(

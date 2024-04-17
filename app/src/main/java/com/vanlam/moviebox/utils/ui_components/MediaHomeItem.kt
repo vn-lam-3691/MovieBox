@@ -5,7 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ImageNotSupported
@@ -51,6 +54,8 @@ fun MediaHomeItem(
 
     Box(
         modifier = Modifier
+            .height(250.dp)
+            .width(180.dp)
             .clip(RoundedCornerShape(16.dp))
             .clickable {
                 navController.currentBackStackEntry?.savedStateHandle?.set("media", media)
@@ -65,13 +70,14 @@ fun MediaHomeItem(
                 bitmap = posterBitmap.asImageBitmap(),
                 contentDescription = media.title,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
             )
         }
         else if (posterState is AsyncImagePainter.State.Error) {
             Icon(
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(height = 250.dp, width = 180.dp)
                     .align(Alignment.Center),
                 imageVector = Icons.Rounded.ImageNotSupported,
                 contentDescription = media.title,

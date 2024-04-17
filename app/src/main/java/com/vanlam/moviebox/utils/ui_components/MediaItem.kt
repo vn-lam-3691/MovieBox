@@ -76,33 +76,39 @@ fun MediaItem(
                 navController.navigate(Screen.DETAIL_SCREEN.route)
             }
     ) {
-        if (posterState is AsyncImagePainter.State.Success) {
-            val posterBitmap = posterState.result.drawable.toBitmap()
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(6.dp)
-                    .clip(RoundedCornerShape(18.dp)),
-                bitmap = posterBitmap.asImageBitmap(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        } else if (posterState is AsyncImagePainter.State.Loading) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .scale(0.5f)
-            )
-        } else if (posterState is AsyncImagePainter.State.Error) {
-            Icon(
-                modifier = Modifier
-                    .size(100.dp),
-                imageVector = Icons.Rounded.ImageNotSupported,
-                contentDescription = media.title,
-                tint = MaterialTheme.colorScheme.onBackground
-            )
+        Box(
+            modifier = Modifier
+                .height(240.dp)
+                .fillMaxSize()
+                .padding(6.dp)
+        ) {
+            if (posterState is AsyncImagePainter.State.Success) {
+                val posterBitmap = posterState.result.drawable.toBitmap()
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .clip(RoundedCornerShape(18.dp)),
+                    bitmap = posterBitmap.asImageBitmap(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            } else if (posterState is AsyncImagePainter.State.Loading) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scale(0.5f)
+                )
+            } else if (posterState is AsyncImagePainter.State.Error) {
+                Icon(
+                    modifier = Modifier
+                        .size(250.dp),
+                    imageVector = Icons.Rounded.ImageNotSupported,
+                    contentDescription = media.title,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -127,7 +133,7 @@ fun MediaItem(
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
-        
+
         Spacer(modifier = Modifier.height(4.dp))
 
         Row(
